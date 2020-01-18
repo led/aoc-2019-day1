@@ -1,7 +1,7 @@
-#Advent of Code 2019 - Day 1
+# Advent of Code 2019 - Day 1
 
 ## Quickstart
-Assumes that you have shadow-cljs and clj-kondo installed.
+Assumes that you have node, shadow-cljs and clj-kondo installed.
 
 Run tests: `make test`
 Run the solution: `make run`
