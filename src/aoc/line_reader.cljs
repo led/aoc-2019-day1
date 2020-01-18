@@ -27,14 +27,15 @@
 
 
 ;; ----------------------------------------------------------------------
+;; ----------------------------------------------------------------------
 
 
 (defn get-data
   "This is the main function that would be used to read the data in.
   Need to provide a function for line-processing
   and a function to call with the result (if any)"
-  [filename line-fn result-fn]
-  (let  [line-reader (LineReader. (atom 0) line-fn result-fn)
+  [filename init-state-fn line-fn result-fn]
+  (let  [line-reader (LineReader. (init-state-fn) line-fn result-fn)
          fh (.createInterface
               readline #js {:input (.createReadStream fs filename)
                             :console false})]
@@ -47,6 +48,7 @@
 ;; specs
 (s/fdef get-data
         :args (s/cat :filename string?
+                     :init-state-fn fn?
                      :line-fn fn?
                      :result-fn fn?)
         :ret nil)
