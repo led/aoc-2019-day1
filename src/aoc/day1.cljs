@@ -11,10 +11,14 @@ https://adventofcode.com/2019/day/1
 "
 
 ;; a few spec defs…
-;; check the value we're receiving from the data file
+;; check the value we're receiving from the data file is actually just
+;; digits that we can use as the item's mass value. Only used when running
+;; the tests
+(s/def ::digit-string (s/and
+                        string?
+                        #(re-matches #"^\d+$" %)))
 (s/def ::mass-number (s/and
-                       string?
-                       #(re-matches #"^\d+$" %)
+                       ::digit-string
                        #(< 0 (js/Number %)))) ; Zac Tellman's opinionated here!
 
 ;; ----------------------------------------------------------------------
@@ -50,19 +54,16 @@ https://adventofcode.com/2019/day/1
 ;; ----------------------------------------------------------------------
 ;; Functions for processing lines of the data file and returning the result
 
+(defn init-state-fn
+  "Return our prepared state atom"
+  []
+  (atom 0))
 
 (defn line-fn
-  "The line contains the item mass. Convert it to a number,
-  perform the fuel calculation on it and add it to the current
-  state."
+  "Take the date-file's line value and process. Result stored in state"
   [process-value-fn state line]
   (s/assert ::mass-number line)
   (reset! state (+ @state (process-value-fn (js/Number line)))))
-
-(defn result-fn
-  "Simply print the state's value as the result"
-  [title result]
-  (println title result))
 
 
 ;; ----------------------------------------------------------------------
@@ -73,6 +74,7 @@ https://adventofcode.com/2019/day/1
   weight of fuel"
   []
   (reader/get-data "src/aoc/data.txt" ; data file
+                   init-state-fn ; set up state atom
                    (partial line-fn get-recursive-fuel-for-mass) ; line fn
                    #(println "Part 2: Fuel required is " %) ; result fn
                    ))
@@ -82,6 +84,7 @@ https://adventofcode.com/2019/day/1
   "Find the total fuel required for listed items' mass"
   []
   (reader/get-data "src/aoc/data.txt" ; data file
+                   init-state-fn ; set up state atom
                    (partial line-fn get-fuel-for-mass) ; line fn
                    #(println "Part 1: Fuel required is " %) ; result fn
                    ))
@@ -91,6 +94,5 @@ https://adventofcode.com/2019/day/1
 ;; Find our solutions…
 (defn main []
   (println "Advent of Code: Day 100")
-  (get-fuel-for-mass :test)
   (part-1)
   (part-2))

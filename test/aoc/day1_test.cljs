@@ -27,6 +27,7 @@
 (deftest check-part-1
   (async done
          (reader/get-data "src/aoc/data.txt" ; data file
+                          day1/init-state-fn
                           (partial day1/line-fn
                                    day1/get-fuel-for-mass) ; line fn
                           #(is (= 3443395 %)) ; result fn
@@ -36,6 +37,7 @@
 (deftest check-part-2
   (async done
          (reader/get-data "src/aoc/data.txt" ; data file
+                          day1/init-state-fn
                           (partial day1/line-fn
                                    day1/get-recursive-fuel-for-mass) ; line fn
                           #(is (= 5162216 %)) ; result fn
