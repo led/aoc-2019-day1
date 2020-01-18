@@ -1,4 +1,4 @@
-#Advent of Code 2019 - Day 1#
+#Advent of Code 2019 - Day 1
 
 ## Quickstart
 Assumes that you have shadow-cljs and clj-kondo installed.
