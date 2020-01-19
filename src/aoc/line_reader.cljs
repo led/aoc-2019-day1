@@ -9,9 +9,9 @@
 ;; ----------------------------------------------------------------------
 ;; Need to open the data file, read each line and process using line-fn
 
-(defprotocol NLineReaderWithState
+(defprotocol ILineReaderWithState
   "Reader protocol with state for node"
-  (process-line [this line])
+  (get-line [this line])
   (get-result [this]))
 
 
@@ -19,8 +19,8 @@
 ;  and a function for handling the result.
 (deftype LineReader
   [state line-fn result-fn]
-  NLineReaderWithState
-  (process-line [this line]
+  ILineReaderWithState
+  (get-line [this line]
     (line-fn state line))
   (get-result [this] (result-fn @state)))
 
@@ -40,7 +40,7 @@
               readline #js {:input (.createReadStream fs filename)
                             :console false})]
     ;; listen for and process reader events
-    (.on fh "line" #(process-line line-reader %))
+    (.on fh "line" #(get-line line-reader %))
     (.on fh "close" #(get-result line-reader))))
 
 
